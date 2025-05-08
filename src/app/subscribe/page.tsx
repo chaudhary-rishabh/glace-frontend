@@ -72,8 +72,8 @@ const ProductSelectionPage: React.FC = () => {
                 <div className="lg:fixed lg:top-52 lg:right-20 sticky right-2 top-12 h-1/2 rounded-3xl w-screen bg-white p-10 md:w-2/5 mb-8 md:mb-0 flex items-center justify-center">
                     <div className="relative w-full max-w-md">
                         <Image
-                            src={"/pheaJuiceLemon.png"}
-                            alt={"/pheaJuiceLemon.png"}
+                            src={"/glace lemon.png"}
+                            alt={"/glace lemon.png"}
                             width={200}
                             height={200}
                             className="w-3/12 h-3/12 object-cover rounded-lg"
@@ -122,8 +122,8 @@ const ProductSelectionPage: React.FC = () => {
                                 <div className="flex items-start">
                                     <div className="flex items-center justify-center h-10/12 w-3/12">
                                         <Image
-                                            src={"/pheaJuiceLemon.png"}
-                                            alt={"/pheaJuiceLemon.png"}
+                                            src={"/glace lemon.png"}
+                                            alt={"/glace lemon.png"}
                                             width={500}
                                             height={500}
                                             className={`w-10/12 h-8/12 object-cover rounded-3xl shadow-lg ${selectedOption === option._id

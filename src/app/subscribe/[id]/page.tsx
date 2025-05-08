@@ -18,7 +18,7 @@ const ProductSelectionPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
     const [productOptions, setProductOptions] = useState<ProductOption[]>([]);
-
+    const [quantities, setQuantities] = useState<Record<string, number>>({});
     useEffect(() => {
         const categoryOptions = async () => {
             try {
@@ -66,9 +66,30 @@ const ProductSelectionPage: React.FC = () => {
     }, [router]);
 
 
+    const increase = (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();                       // ⬅️  important line
+        setQuantities(prev => ({ ...prev, [id]: (prev[id] ?? 0) + 1 }));
+    };
+
+    const decrease = (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();                       // ⬅️  important line
+        setQuantities(prev => ({
+            ...prev,
+            [id]: Math.max((prev[id] ?? 0) - 1, 0),
+        }));
+    };
+
+
+    const totalAmount = productOptions.reduce((sum, opt) => {
+        return sum + (quantities[opt._id] || 0) * opt.price;
+    }, 0);
+
+
     if (isLoading || !isLoggedIn) {
         return <SkeletonLoader />;
     }
+
+
 
     return (
         <div className="flex flex-col min-h-screen mt-20">
@@ -77,12 +98,15 @@ const ProductSelectionPage: React.FC = () => {
                 <div className="lg:fixed lg:right-20 lg:top-52 sticky right-2 top-12 h-1/2 rounded-3xl w-screen bg-white p-10 md:w-2/5 mb-8 md:mb-0 flex items-center justify-center">
                     <div className="relative w-full max-w-md">
                         <Image
-                            src={"/pheaJuiceLemon.png"}
-                            alt={"/pheaJuiceLemon.png"}
+                            src={"/glace lemon.png"}
+                            alt={"/glace lemon.png"}
                             width={200}
                             height={200}
                             className="w-3/12 h-3/12 object-cover rounded-lg"
                         />
+                        <div className="mt-6 w-full">
+                            <p className="text-xl font-semibold text-gray-700">Total: ₹{totalAmount}</p>
+                        </div>
                     </div>
 
                     <div className="mt-6">
@@ -127,8 +151,8 @@ const ProductSelectionPage: React.FC = () => {
                                 <div className="flex items-start">
                                     <div className="flex items-center justify-center h-10/12 w-3/12">
                                         <Image
-                                            src={"/pheaJuiceLemon.png"}
-                                            alt={"/pheaJuiceLemon.png"}
+                                            src={"/glace lemon.png"}
+                                            alt={"/glace lemon.png"}
                                             width={500}
                                             height={500}
                                             className={`w-10/12 h-8/12 object-cover rounded-3xl shadow-lg ${selectedOption === option._id
@@ -146,6 +170,23 @@ const ProductSelectionPage: React.FC = () => {
                                         </div>
                                         <h3 className="text-xl font-bold text-gray-900">{option.name}</h3>
                                         <p className="text-gray-600 mt-1">{option.desc}</p>
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                onClick={e => decrease(e, option._id)}
+                                                className="px-3 py-1 bg-gray-200 rounded-full"
+                                            >
+                                                –
+                                            </button>
+
+                                            <span>{quantities[option._id] ?? 0}</span>
+
+                                            <button
+                                                onClick={e => increase(e, option._id)}
+                                                className="px-3 py-1 bg-gray-200 rounded-full"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
