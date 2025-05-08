@@ -3,25 +3,61 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #fdfcf7;
   --foreground: #171717;
+  /* --font-signika: var(--font-signika-negative); */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #fbf2e6;
+    --foreground: #014034;
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-signika-negative); /* Changed from --font-signika */
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.btnBg {
+  background-color: #014034;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+  transform: scale(1);
+  transition: all 0.5s ease;
+}
+
+.btnBg:hover {
+  background-color: #0a5b4c;
+  transform: scale(1.05);
+}
+
+.bgCream{
+  background-color: #ffffff;
+}
+
+.roundedLg{
+  border-radius: 40px;
+}
+
+.ingredientsBg{
+  background-image: url('/glace ingredients main.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bgMain{
+  background-color: #fbf2e6;
 }

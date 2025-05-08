@@ -1,101 +1,111 @@
+'use client';
+import LandingPageCard from "@/components/cards/LandingPageCard";
+import { FAQ } from "@/components/faq/FaqItem";
+import FlowDesign from "@/components/flow/FlowDesign";
+import BentoGrid from "@/components/grid/BentoGrid";
+import BentoTwo from "@/components/grid/BentoTwo";
+import { api } from "@/lib/api";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+// Define the type for API response item
+interface FAQApiItem {
+  _id: string;
+  question: string;
+  answer: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // Store the API response directly
+  const [faqItems, setFaqItems] = useState<FAQApiItem[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const fetchFnq = async () => {
+      try {
+        const response = await api.get("/fnq/getFnq");
+        setFaqItems(response.data);
+      } catch (error) {
+        console.error("Failed to fetch FAQs:", error);
+      }
+    };
+
+    fetchFnq();
+  }, []);
+
+  // Transform the API data to match the expected format for the FAQ component
+  const mappedFaqItems = faqItems.map(item => ({
+    id: item._id,
+    question: item.question,
+    answer: item.answer
+  }));
+
+  return (
+    <>
+      <div className="min-h-screen bg-[#fbf2e6] flex flex-col md:flex-row items-center justify-center p-4 md:p-8">
+        <div className="w-full md:w-1/2 flex items-center justify-center mb-8 md:mb-0">
+          <LandingPageCard />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+
+        <div className="w-full md:w-1/2 lg:w-5/12 px-4 md:px-8 lg:px-10 text-center md:text-left">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 text-green-900">Welcome to Glace</h1>
+          <p className="text-base sm:text-lg lg:text-xl mb-6 md:mb-8 text-green-800">
+            Discover the best drinks for your health and wellness.
+          </p>
+          <div className="flex flex-col mb-5 sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
+            <Link
+              href="/subscribe"
+              className="bg-white border-2 border-green-900 text-green-900 px-6 py-2 rounded-lg shadow-md hover:bg-green-50 transition-all duration-300 text-sm sm:text-base"
+            >
+              Subscribe <span aria-hidden="true">&rarr;</span>
+            </Link>
+            <Link
+              href="/collection"
+              className="bg-green-900 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-800 transition-all duration-300 text-sm sm:text-base"
+            >
+              Order Now
+            </Link>
+          </div>
+          <FlowDesign />
+        </div>
+      </div>
+
+      {/* bentogrid */}
+      <BentoGrid />
+
+      {/* second info container */}
+      <div className="w-11/12 lg:w-10/12 mx-auto bg-white roundedLg flex flex-col items-center justify-center shadow-lg rounded-3xl p-14 mt-8 mb-8">
+        <div className="bg-white h-auto rounded-3xl flex items-center justify-center">
+          <div>
+            <h1 className="text-3xl text-green-800 w-8/12 p-2 font-semibold text-center mb-4 rounded-2xl">
+              Glace is served in glass bottles
+            </h1>
+            <ol className="text-md mb-8 p-2">
+              <li className="p-2"><span className="font-bold">Preserves Nutrients & Quality</span> – Maintains the juice freshness and nutritional value over time.</li>
+              <li className="p-2"><span className="font-bold">Better Taste & Freshness</span> – Glass does not alter the taste of juice, keeping it pure and fresh.</li>
+              <li className="p-2"><span className="font-bold">No Chemical Leaching</span> – Unlike plastic, glass does not release harmful chemicals into the juice.</li>
+              <li className="p-2"><span className="font-bold">Health-Conscious Choice</span> – A trusted material for those who prioritize wellness and purity.</li>
+              <li className="p-2"><span className="font-bold">Eco-Friendly & Sustainable</span> – 100% recyclable and reusable, reducing environmental impact.</li>
+              <li className="p-2"><span className="font-bold">Premium & Elegant Appeal</span> – Enhances brand image with a high-quality, premium look.</li>
+            </ol>
+          </div>
           <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src={"/glace jug pouring.png"}
+            alt={"glace jug pouring"}
+            width={400}
+            height={400}
+            className="w-3/12 h-3/12 lg:block hidden object-cover shadow-lg roundedLg"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        </div>
+      </div>
+
+      <BentoTwo />
+
+      {/* faq - only render if there are items */}
+      {mappedFaqItems.length > 0 && <FAQ items={mappedFaqItems} />}
+    </>
   );
 }
